@@ -134,9 +134,20 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(value = "/student/assignCourse/{studentid}/{courseid}", produces = {"application/json"})
-    public ResponseEntity<?> assignStudentToCourse(@PathVariable long studentid,
-                                                   @PathVariable long courseid) {
+    @ApiOperation(value = "Assigns a Student to a Course", response = void.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Student successfully assigned to a Course", response = void.class),
+            @ApiResponse(code = 500, message = "Error assigning the Student", response = ErrorDetail.class),
+            @ApiResponse(code = 404, message = "Student or Course Not Found", response = ErrorDetail.class)
+    })
+    @PutMapping(value = "/student/assignCourse/{studentid}/{courseid}",
+            produces = {"application/json"})
+    public ResponseEntity<?> assignStudentToCourse(@PathVariable
+                                                   @ApiParam(value = "Student Id", required = true,
+                                                           example = "1") long studentid,
+                                                   @PathVariable
+                                                   @ApiParam(value = "Course Id", required = true,
+                                                           example = "1") long courseid) {
         studentService.assignStudentToCourse(studentid, courseid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
