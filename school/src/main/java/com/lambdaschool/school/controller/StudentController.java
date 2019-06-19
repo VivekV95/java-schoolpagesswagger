@@ -134,4 +134,11 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PutMapping(value = "/student/assignCourse/{studentid}/{courseid}", produces = {"application/json"})
+    public ResponseEntity<?> assignStudentToCourse(@PathVariable long studentid,
+                                                   @PathVariable long courseid) {
+        studentService.assignStudentToCourse(studentid, courseid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

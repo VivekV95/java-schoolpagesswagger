@@ -5,6 +5,7 @@ import com.lambdaschool.school.model.Student;
 import com.lambdaschool.school.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,7 +61,9 @@ public class StudentServiceImpl implements StudentService
         Student newStudent = new Student();
 
         newStudent.setStudname(student.getStudname());
-
+        for (Course course: student.getCourses()) {
+            newStudent.getCourses().add(course);
+        }
         return studrepos.save(newStudent);
     }
 
@@ -76,5 +79,11 @@ public class StudentServiceImpl implements StudentService
         }
 
         return studrepos.save(currentStudent);
+    }
+
+    @Transactional
+    @Override
+    public void assignStudentToCourse(long studentid, long courseid) {
+        studrepos.assignStudentToCourse(studentid, courseid);
     }
 }

@@ -18,4 +18,6 @@ public interface StudentService
     Student save (Student student);
 
     Student update(Student student, long id);
+
+    void assignStudentToCourse(long studentid, long courseid);
 }

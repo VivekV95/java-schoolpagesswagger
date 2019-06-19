@@ -18,6 +18,9 @@ public class Instructor
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long instructid;
 
+    @ApiModelProperty(name = "instructname",
+            value = "Instructor Name", required = true,
+            example = "John")
     private String instructname;
 
     @OneToMany(mappedBy = "instructor")
