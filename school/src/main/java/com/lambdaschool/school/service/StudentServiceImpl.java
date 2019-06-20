@@ -4,6 +4,8 @@ import com.lambdaschool.school.model.Course;
 import com.lambdaschool.school.model.Student;
 import com.lambdaschool.school.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +20,10 @@ public class StudentServiceImpl implements StudentService
     private StudentRepository studrepos;
 
     @Override
-    public List<Student> findAll()
+    public List<Student> findAll(Pageable pageable)
     {
         List<Student> list = new ArrayList<>();
-        studrepos.findAll().iterator().forEachRemaining(list::add);
+        studrepos.findAll(pageable).iterator().forEachRemaining(list::add);
         return list;
     }
 
@@ -33,10 +35,10 @@ public class StudentServiceImpl implements StudentService
     }
 
     @Override
-    public List<Student> findStudentByNameLike(String name)
+    public List<Student> findStudentByNameLike(String name, Pageable pageable)
     {
         List<Student> list = new ArrayList<>();
-        studrepos.findByStudnameContainingIgnoreCase(name).iterator().forEachRemaining(list::add);
+        studrepos.findByStudnameContainingIgnoreCase(name, pageable).iterator().forEachRemaining(list::add);
         return list;
     }
 
@@ -59,7 +61,9 @@ public class StudentServiceImpl implements StudentService
         Student newStudent = new Student();
 
         newStudent.setStudname(student.getStudname());
-
+        for (Course course: student.getCourses()) {
+            newStudent.getCourses().add(course);
+        }
         return studrepos.save(newStudent);
     }
 
@@ -75,5 +79,11 @@ public class StudentServiceImpl implements StudentService
         }
 
         return studrepos.save(currentStudent);
+    }
+
+    @Transactional
+    @Override
+    public void assignStudentToCourse(long studentid, long courseid) {
+        studrepos.assignStudentToCourse(studentid, courseid);
     }
 }
